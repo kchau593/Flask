@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -15,8 +15,24 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-    return "hello world"
+    '''
+    This is the index/home page when the web page is first opened.
+    '''
+    return render_template('index.html')
 
+@app.route('/chat')
+def chat():
+    '''
+    This 
+    '''
 
+    #pull the username and roomid that is entered, you can find it in the index.html 
+    username = request.args.get('username')
+    roomid = request.args.get('roomid')
+
+    if username and roomid:
+        return render_template('chat.html')
+    else:
+        return render_template(url_for('index')) #'render_template(url_for('index')) is the same as just redirect('/')
 if __name__ == '__main__':
     app.run(debug=True)
