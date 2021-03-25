@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect #flask library used to make web app
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -23,7 +23,7 @@ def index():
 @app.route('/chat')
 def chat():
     '''
-    This 
+    This will handle the username and roomid infor and move you into the correct room
     '''
 
     #pull the username and roomid that is entered, you can find it in the index.html 
@@ -31,8 +31,10 @@ def chat():
     roomid = request.args.get('roomid')
 
     if username and roomid:
-        return render_template('chat.html')
+        return render_template('chat.html',username=username, roomid=roomid) #passed into it username and roomid
     else:
         return render_template(url_for('index')) #'render_template(url_for('index')) is the same as just redirect('/')
+
+#just a main that will call you app and run it        
 if __name__ == '__main__':
     app.run(debug=True)
