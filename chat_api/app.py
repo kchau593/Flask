@@ -1,16 +1,18 @@
 from flask import Flask, render_template, request, url_for, redirect #flask library used to make web app
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+# db = SQLAlchemy(app)
+socketio = SocketIO(app)
 
 #sqlalchamey db
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    description = db.Column(db.String(120))
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(80), unique=True, nullable=False)
+#     description = db.Column(db.String(120))
 
 
 @app.route('/')
@@ -37,4 +39,5 @@ def chat():
 
 #just a main that will call you app and run it        
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True) instead of just running the app
+    socketio.run(app,debug=True,host='0.0.0.0',port=5000) #make sure to pass app into it as well.
