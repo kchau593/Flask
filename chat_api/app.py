@@ -37,6 +37,12 @@ def chat():
     else:
         return redirect(url_for('home')) #'render_template(url_for('index')) is the same as just redirect('/')
 
+
+#handles the join_room event that is created from the chat.html file 
+@socketio.on('join_room')
+def handle_join_room_event(data):
+    app.logger.info("{} has joined the room {}".format(data['username'], data['roomid']))
+
 #just a main that will call you app and run it        
 if __name__ == '__main__':
     # app.run(debug=True) #instead of just running the app

@@ -16,11 +16,26 @@
 
 <!-- This is like an import for the socketio and jquery so that you can call it in the script below -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  <!-- This is a Google hosted library-->
+
+<!-- This is a Google hosted library and it's the function that starts with $ doc-->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>   -->
 
 
 <script type = "text/javascript">
-    $(document).ready(function(){ 
+    const socket = io.connect('http://127.0.0.1:5001');
+
+        socket.on('connect', function () {
+            socket.emit('join_room', {
+
+                //The left is what is passed into the join_room function
+                username: " {{ username }}", // ex. username = {{ username }}
+                roomid: "{{ roomid }}"
+            });
+        });
+        
+
+
+    /*$(document).ready(function(){ 
 
         //Make sure that this is correctly being ported with docker and it's not just '0.0.0.0' 
         var socket = io.connect("http://127.0.0.1:5001"); 
@@ -29,7 +44,7 @@
         socket.on('connect', function() {
             socket.send('User has connected');
         });
-    });
+    });*/
     
 </script>
 </html> 
