@@ -14,8 +14,22 @@
         </form>
 </body>
 
+<!-- This is like an import for the socketio and jquery so that you can call it in the script below -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
-<script>
-    const socket = io.connect("http://localhost:5000");
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  <!-- This is a Google hosted library-->
+
+
+<script type = "text/javascript">
+    $(document).ready(function(){ 
+
+        //Make sure that this is correctly being ported with docker and it's not just '0.0.0.0' 
+        var socket = io.connect("http://127.0.0.1:5001"); 
+
+        //This is used to let people know that a user is connected (listens to when a connection happens)
+        socket.on('connect', function() {
+            socket.send('User has connected');
+        });
+    });
+    
 </script>
 </html> 

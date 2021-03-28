@@ -16,7 +16,7 @@ socketio = SocketIO(app)
 
 
 @app.route('/')
-def index():
+def home():
     '''
     This is the index/home page when the web page is first opened.
     '''
@@ -35,9 +35,9 @@ def chat():
     if username and roomid:
         return render_template('chat.html',username=username, roomid=roomid) #passed into it username and roomid
     else:
-        return render_template(url_for('index')) #'render_template(url_for('index')) is the same as just redirect('/')
+        return redirect(url_for('home')) #'render_template(url_for('index')) is the same as just redirect('/')
 
 #just a main that will call you app and run it        
 if __name__ == '__main__':
-    # app.run(debug=True) instead of just running the app
-    socketio.run(app,debug=True,host='0.0.0.0',port=5000) #make sure to pass app into it as well.
+    # app.run(debug=True) #instead of just running the app
+    socketio.run(app,debug=True,port = 5001) #make sure to pass app into it as well.
