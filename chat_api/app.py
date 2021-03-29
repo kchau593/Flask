@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect #flask library used to make web app
 # from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room
 
 
 app = Flask(__name__)
@@ -42,6 +42,11 @@ def chat():
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['roomid']))
+    join_room(data['roomid']) # method from flask_socketio that creates a room with id
+    
+    # Creates an event and announces it, will catch it in the chat.html file
+    socketio.emit('join_room_announcement', data)
+    
 
 #just a main that will call you app and run it        
 if __name__ == '__main__':

@@ -8,7 +8,7 @@
 <body>
     <h1>Welcome to chat room {{ roomid }}</h1> <!-- This is where and how room is referenced-->
         <div id="messages"></div> <!-- initialliy empty because there are no messages yet -->
-        <form>
+        <form id = 'message_input'>
             <input type="text" placeholder="Enter your message here">
             <button type = "submit">Send</button>
         </form>
@@ -22,8 +22,9 @@
 
 
 <script type = "text/javascript">
-    const socket = io.connect('http://127.0.0.1:5001');
+    const socket = io.connect('http://127.0.0.1:5001'); 
 
+        //Handles the when a connect event happens like the above
         socket.on('connect', function () {
             socket.emit('join_room', {
 
@@ -32,7 +33,18 @@
                 roomid: "{{ roomid }}"
             });
         });
-        
+
+        //listens to the join_room_announcement event created by app.py in the handle_join_room_event method
+        socket.on('join_room_announcement', function(data) { //note that data is in between function because it is passed it
+            
+            //console.log(data)//print to make sure it works
+
+            //Grab the div variable from html
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<b>${ data.username }</b> has joined the room`; // created a div with reference to the data.username that is passed into function <b> is bold
+            document.getElementById('messages').appendChild(newNode); //append the div that was created into the messages div that we had earlier
+
+        })
 
 
     /*$(document).ready(function(){ 
