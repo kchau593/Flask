@@ -51,4 +51,4 @@ def handle_join_room_event(data):
 #just a main that will call you app and run it        
 if __name__ == '__main__':
     # app.run(debug=True) #instead of just running the app
-    socketio.run(app,debug=True,port = 5001) #make sure to pass app into it as well.
+    socketio.run(app,debug=True,host='0.0.0.0') #make sure that host is 0.0.0.0 so it works with local host.
