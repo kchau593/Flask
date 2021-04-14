@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, join_room
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 # db = SQLAlchemy(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app,cors_allowed_origins="*") #need cors_allowed_origins so that IP out of the dmain can still access and talk to server 
 
 #sqlalchamey db
 # class User(db.Model):
@@ -40,6 +40,7 @@ def chat():
 
 #handles the join_room event that is created from the chat.html file 
 @socketio.on('join_room')
+
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['roomid']))
     join_room(data['roomid']) # method from flask_socketio that creates a room with id
@@ -51,8 +52,4 @@ def handle_join_room_event(data):
 #just a main that will call you app and run it        
 if __name__ == '__main__':
     # app.run(debug=True) #instead of just running the app
-<<<<<<< HEAD
     socketio.run(app,debug=True,host = '0.0.0.0') #make sure to pass app into it as well.
-=======
-    socketio.run(app,debug=True,host='0.0.0.0') #make sure that host is 0.0.0.0 so it works with local host.
->>>>>>> 501e4873fe24a4b9aa320d73644a5ac492e8aae3

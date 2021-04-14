@@ -44,19 +44,7 @@
             newNode.innerHTML = `<b>${ data.username }</b> has joined the room`; // created a div with reference to the data.username that is passed into function <b> is bold
             document.getElementById('messages').appendChild(newNode); //append the div that was created into the messages div that we had earlier
 
-        })
-
-
-    /*$(document).ready(function(){ 
-
-        //Make sure that this is correctly being ported with docker and it's not just '0.0.0.0' 
-        var socket = io.connect("http://127.0.0.1:5001"); 
-
-        //This is used to let people know that a user is connected (listens to when a connection happens)
-        socket.on('connect', function() {
-            socket.send('User has connected');
         });
-    });*/
     
 </script>
 </html> 
