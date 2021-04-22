@@ -8,8 +8,9 @@
 <body>
     <h1>Welcome to chat room {{ roomid }}</h1> <!-- This is where and how room is referenced-->
         <div id="messages"></div> <!-- initialliy empty because there are no messages yet -->
-        <form id = 'message_input'>
-            <input type="text" placeholder="Enter your message here">
+        
+        <form id = "message_input_form">
+            <input id = "message_input" type="text" placeholder="Enter your message here">
             <button type = "submit">Send</button>
         </form>
 </body>
@@ -28,22 +29,58 @@
         socket.on('connect', function () {
             socket.emit('join_room', {
 
-                //The left is what is passed into the join_room function
-                username: " {{ username }}", // ex. username = {{ username }}
-                roomid: "{{ roomid }}"
+                //username and roomid are like this because they are passed from app.py from line 36
+                username: "{{username}}", // ex. username = {{ username }}
+                roomid: "{{roomid}}"
             });
+            
+            //get the messages_input id from the html above 
+            let message_input = document.getElementById('message_input'); 
+
+            //catch the click event from message input form. 'e' is the event 
+            document.getElementById('message_input_form').onsubmit = function (e) {
+                e.preventDefault(); // default for a submit form is do a GET request with url which we don't want
+                let message = message_input.value.trim(); // trim() simply removes whitespaces from both ends of string
+                if (message.length){
+                    socket.emit('send_message', {
+
+                        //username and roomid are like this because they are passed from app.py from line 36
+                        username: "{{username}}",
+                        roomid: "{{roomid}}",
+                        message: message // here it is not like above because it is a vraiable created in js
+                    });
+                    
+                    //Clear the messages input after it is emited
+                    message_input.value = '';
+                    
+                }
+
+                message_input.focus(); //bring focus back the the message input so you can keep typing
+
+            }
+
         });
 
         //listens to the join_room_announcement event created by app.py in the handle_join_room_event method
-        socket.on('join_room_announcement', function(data) { //note that data is in between function because it is passed it
+        socket.on('join_room_announcement', function(data) { //note that data is in between function because it is passed
             
             //console.log(data)//print to make sure it works
 
             //Grab the div variable from html
             const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${ data.username }</b> has joined the room`; // created a div with reference to the data.username that is passed into function <b> is bold
+            newNode.innerHTML = `<b>${data.username}</b> has joined the room`; // created a div with reference to the data.username that is passed into function <b> is bold
             document.getElementById('messages').appendChild(newNode); //append the div that was created into the messages div that we had earlier
 
+        });
+
+        socket.on('message_sent_anouncement', function(data) {
+
+             // Copied from the join_room_announcement method
+             //Grab the div variable from 
+             const newNode = document.createElement('div');
+             newNode.innerHTML = `<b>${data.username}</b>: ${data.message}`; // created a div with reference to the data.username that is passed into function <b> is bold
+             console.log(newNode)
+             document.getElementById('messages').appendChild(newNode); //append the div that was created into the messages div that we had earlier 
         });
     
 </script>

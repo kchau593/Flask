@@ -40,14 +40,20 @@ def chat():
 
 #handles the join_room event that is created from the chat.html file 
 @socketio.on('join_room')
-
 def handle_join_room_event(data):
+    #log it so you can see it in the terminal
     app.logger.info("{} has joined the room {}".format(data['username'], data['roomid']))
     join_room(data['roomid']) # method from flask_socketio that creates a room with id
     
-    # Creates an event and announces it, will catch it in the chat.html file
-    socketio.emit('join_room_announcement', data)
-    
+    # Creates an event and announces it, will catch it in the chat.html file emits to all of the other clients
+    socketio.emit('join_room_announcement', data, room=data['roomid'])
+
+#handles the send_message even that is created from the chat.html file
+@socketio.on('send_message')
+def handle_send_message(data):
+    app.logger.info("{} has sent a message the room {}: {}".format(data['username'], data['roomid'], data['message']))
+    #emit the message to the other clients in the room
+    socketio.emit('message_sent_anouncement',data, room=data['roomid'])
 
 #just a main that will call you app and run it        
 if __name__ == '__main__':
